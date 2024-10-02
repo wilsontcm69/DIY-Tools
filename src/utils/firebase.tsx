@@ -2,10 +2,9 @@ import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCTI7j2pUdXhz-2SoH3PFOfhfyJx49V3c8",
-  authDomain: "diy-tools-19f73.firebaseapp.com",
-  databaseURL:
-    "https://diy-tools-19f73-default-rtdb.asia-southeast1.firebasedatabase.app",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
   projectId: "diy-tools-19f73",
   storageBucket: "diy-tools-19f73.appspot.com",
   messagingSenderId: "883371075756",
