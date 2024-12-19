@@ -36,7 +36,7 @@ export default function My50() {
             get(ref(db, "my50/" + userUsername)).then((snapshot) => {
                 const data = snapshot.val();
                 if (data) {
-                    setPurchasedDate(new Date(data));
+                    setPurchasedDate(new Date(data.purchaseDate));
                 } else {
                     toast.error("No Record Found");
                 }
@@ -48,8 +48,8 @@ export default function My50() {
 
     function saveUser() {
         if (inputValidation()) {
-            set(ref(db, "my50"), {
-                [userUsername]: purchasedDate.getTime(),
+            set(ref(db, "my50/" + userUsername), {
+                "purchaseDate": purchasedDate.getTime(),
             }).then(() => {
                 toast.success("User Saved");
             }).catch(() => {
@@ -109,53 +109,51 @@ export default function My50() {
     return (
         <>
             <Typography variant="h3" className='dark:text-white mb-4'>My50 Calculator</Typography>
-            <div>
-                <div className='flex items-center gap-2 justify-center'>
-                    <div className='w-72'>
-                        <Input color="blue" label="Username" value={userUsername}
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                const regex = /^[a-zA-Z0-9]*$/;
-                                if (regex.test(value)) {
-                                    setUserUsername(value);
-                                }
-                            }}
-                            className='dark:text-white'
-                        />
+            <div className='flex justify-center'>
+                <div>
+                    <div className='flex items-center gap-2 justify-center'>
+                        <div className='lg:w-72 sm:w-60'>
+                            <Input color="blue" label="Username" value={userUsername}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    const regex = /^[a-zA-Z0-9]*$/;
+                                    if (regex.test(value)) {
+                                        setUserUsername(value);
+                                    }
+                                }}
+                                className='dark:text-white'
+                            />
+                        </div>
+                        <Tooltip content="Get" className="dark:bg-blue-gray-600">
+                            <IconButton
+                                variant="text"
+                                className="rounded-full hover:bg-blue-gray-50 dark:hover:bg-blue-gray-800 text-blue-gray-600 dark:text-blue-gray-300"
+                                onClick={() => fetchUser()}
+                            >
+                                <CloudArrowDownIcon className='size-6' />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip content="Save" className="dark:bg-blue-gray-600">
+                            <IconButton
+                                variant="text"
+                                className="rounded-full hover:bg-blue-gray-50 dark:hover:bg-blue-gray-800 text-blue-gray-600 dark:text-blue-gray-300"
+                                onClick={() => saveUser()}
+                            >
+                                <CloudArrowUpIcon className='size-6' />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip content="Delete" className="dark:bg-blue-gray-600">
+                            <IconButton
+                                variant="text"
+                                className="rounded-full hover:bg-blue-gray-50 dark:hover:bg-blue-gray-800 text-blue-gray-600 dark:text-blue-gray-300"
+                                onClick={() => deleteUser()}
+                            >
+                                <TrashIcon className='size-6' />
+                            </IconButton>
+                        </Tooltip>
                     </div>
-                    <Tooltip content="Get" className="dark:bg-blue-gray-600">
-                        <IconButton
-                            variant="text"
-                            className="rounded-full hover:bg-blue-gray-50 dark:hover:bg-blue-gray-800 text-blue-gray-600 dark:text-blue-gray-300"
-                            onClick={() => fetchUser()}
-                        >
-                            <CloudArrowDownIcon className='size-6' />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip content="Save" className="dark:bg-blue-gray-600">
-                        <IconButton
-                            variant="text"
-                            className="rounded-full hover:bg-blue-gray-50 dark:hover:bg-blue-gray-800 text-blue-gray-600 dark:text-blue-gray-300"
-                            onClick={() => saveUser()}
-                        >
-                            <CloudArrowUpIcon className='size-6' />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip content="Delete" className="dark:bg-blue-gray-600">
-                        <IconButton
-                            variant="text"
-                            className="rounded-full hover:bg-blue-gray-50 dark:hover:bg-blue-gray-800 text-blue-gray-600 dark:text-blue-gray-300"
-                            onClick={() => deleteUser()}
-                        >
-                            <TrashIcon className='size-6' />
-                        </IconButton>
-                    </Tooltip>
+                    {userExist && <Typography className='text-sm text-gray-500'>* User Exist</Typography>}
                 </div>
-                {userExist && (
-                    <div className='flex justify-center pr-[360px]'>
-                        <Typography className='text-sm text-gray-500'>* User Exist</Typography>
-                    </div>
-                )}
             </div>
 
             <div className='flex items-center justify-start md:justify-center gap-x-2 py-10'>
